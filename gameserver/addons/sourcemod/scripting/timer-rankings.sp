@@ -15,7 +15,7 @@
 #include <autoexecconfig>	//https://github.com/Impact123/AutoExecConfig
 
 #undef REQUIRE_PLUGIN
-#include <scp>
+#include <chat-processor>
 #include <timer-maptier>
 #include <timer-physics>
 #include <timer-worldrecord>
@@ -73,7 +73,7 @@ new Handle:g_hAllchat = INVALID_HANDLE;
 //* * * * * * * * * * * * * * * * * * * * * * * * * *
 new bool:g_bLateLoad;
 new bool:g_bLateQuery;
-new bool:g_bSimpleChatProcessor;
+new bool:g_bChatProcessor;
 new bool:g_bInitalizing;
 new bool:g_bGlobalMessage;
 new bool:g_bSettingsMenu;
@@ -1017,10 +1017,9 @@ public MenuHandler_InfoMenu(Handle:menu, MenuAction:action, param1, param2)
 		}
 	}
 }
-
-public Action:OnChatMessage(&author, Handle:recipients, String:name[], String:message[])
+Action CP_OnChatMessage(int& author, ArrayList recipients, char[] flagstring, char[] name, char[] message, bool & processcolors, bool & removecolors);
 {
-	if(!g_bSimpleChatProcessor)
+	if(!g_bChatProcessor)
 		return Plugin_Continue;
 	
 	if(!g_iEnabled || !g_bAuthed[author] || !g_iDisplayMethod)
